@@ -17,7 +17,7 @@
         <p>
             <?php if ($session->isAuthenticated()): ?>
                 <a href="<?php echo $base_url; ?>/">ホーム</a>
-                <a href="<?php echo $base_url; ?>/account">アカウント</a>
+                <a href="<?php echo $base_url; ?>/account/detail">アカウント</a>
             <?php else: ?>
                 <a href="<?php echo $base_url; ?>/account/signin">ログイン</a>
                 <a href="<?php echo $base_url; ?>/account/signup">アカウント登録</a>

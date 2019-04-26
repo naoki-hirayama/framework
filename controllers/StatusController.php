@@ -9,16 +9,40 @@ class StatusController extends Controller
 {
     protected $auth_actions = array('index', 'post');
 
-    public function indexAction()
+    public function indexAction($params)
     {
         $user = $this->session->get('user');
-        $statuses = $this->db_manager->get('Status')
-            ->fetchAllPersonalArchivesByUserId($user['id']);
+        //総投稿数を取得
+        $sql = 'SELECT COUNT(*) cnt FROM status a LEFT JOIN user u ON a.user_id = u.id LEFT JOIN following f ON f.following_id = a.user_id AND f.user_id = :user_id WHERE f.user_id = :user_id OR u.id = :user_id';
+        $total_records = $this->db_manager->get('Status')->fetch($sql, array(
+            ':user_id' =>$user['id']
+        ));
 
+        $max_pager_range = 4;
+        $per_page_records = 5;
+
+        if (isset($params['page'])) {
+            $page = $params['page'];
+        } else {
+            $page = 1;
+        }
+        
+        $pager = new Pager($total_records['cnt'], $max_pager_range, $per_page_records);
+        $pager->setCurrentPage($page);
+        $offset = $pager->getOffset();
+        $per_page_records = $pager->getPerPageRecords();
+        $e[] = $offset;
+        var_dump($e);
+        $sql = "SELECT a.*,u.user_name FROM status a LEFT JOIN user u ON a.user_id = u.id LEFT JOIN following f ON f.following_id = a.user_id AND f.user_id = :user_id WHERE f.user_id = :user_id OR u.id = :user_id ORDER BY a.created_at DESC LIMIT {$offset},{$per_page_records}";
+        $statuses = $this->db_manager->get('Status')->fetchAll($sql, array(
+            ':user_id' => $user['id']
+        ));
+        
         return $this->render(array(
             'statuses' => $statuses,
             'body'     => '',
             '_token'   => $this->generateCsrfToken('status/post'),
+            'pager'    => $pager,
         ));
     }
 
