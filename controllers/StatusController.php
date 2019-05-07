@@ -17,7 +17,7 @@ class StatusController extends Controller
         $total_records = $this->db_manager->get('Status')->fetch($sql, array(
             ':user_id' =>$user['id']
         ));
-
+        
         $max_pager_range = 4;
         $per_page_records = 5;
 
@@ -31,8 +31,7 @@ class StatusController extends Controller
         $pager->setCurrentPage($page);
         $offset = $pager->getOffset();
         $per_page_records = $pager->getPerPageRecords();
-        $e[] = $offset;
-        var_dump($e);
+        
         $sql = "SELECT a.*,u.user_name FROM status a LEFT JOIN user u ON a.user_id = u.id LEFT JOIN following f ON f.following_id = a.user_id AND f.user_id = :user_id WHERE f.user_id = :user_id OR u.id = :user_id ORDER BY a.created_at DESC LIMIT {$offset},{$per_page_records}";
         $statuses = $this->db_manager->get('Status')->fetchAll($sql, array(
             ':user_id' => $user['id']

@@ -23,7 +23,7 @@ abstract class Controller
      */
     public function __construct($application)
     {
-        $this->controller_name = strtolower(substr(get_class($this), 0, -10));
+        $this->controller_name = strtolower(substr(get_class($this), 0, -10));//例 $this: UserController
 
         $this->application = $application;
         $this->request     = $application->getRequest();
@@ -41,12 +41,16 @@ abstract class Controller
      *
      * @throws UnauthorizedActionException 認証が必須なアクションに認証前にアクセスした場合
      */
-    public function run($action, $params = array()) //わからない
+    public function run($action, $params = array()) 
     {
-        //var_dump($action); //index
+        //$action = $params['action']; = 
+        //$params
+
         $this->action_name = $action;
 
         $action_method = $action . 'Action';
+        //var_dump($this);
+        //指定した object にクラスメソッドが存在するかどうか  
         if (!method_exists($this, $action_method)) {
             $this->forward404();
         }
@@ -54,10 +58,12 @@ abstract class Controller
         if ($this->needsAuthentication($action) && !$this->session->isAuthenticated()) {
             throw new UnauthorizedActionException();
         }
+        //var_dump($action_method);
+        //$this->indexAction($params) 可変関数
+        //statuscontrollerのindexActionを実行　//renderメソッド
+        $content = $this->$action_method($params);
 
-        $content = $this->$action_method($params);  //?????
-
-        //var_dump($content); //string(1486) ???
+        //var_dump($content); //string(1486) 
 
         return $content;
     }

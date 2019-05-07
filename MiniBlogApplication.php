@@ -11,7 +11,7 @@ class MiniBlogApplication extends Application
 
     public function getRootDir()
     {
-        return dirname(__FILE__);  
+        return dirname(__FILE__); // 
     }
 
     protected function registerRoutes()

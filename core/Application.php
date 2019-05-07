@@ -172,18 +172,22 @@ abstract class Application
      */
     public function run()
     {
+        
         try {
+            //コントローラー名とアクション名を特定
             $params = $this->router->resolve($this->request->getPathInfo());
             var_dump($params);
+            //array(3) { ["controller"]=> string(7) "account" ["action"]=> string(5) "index" [0]=> string(15) "/account/detail" }
 
             if ($params === false) {
                 throw new HttpNotFoundException('No route found for ' . $this->request->getPathInfo());
             }
-
+            //コントローラー、アクション名をそれぞれ代入
             $controller = $params['controller'];
             $action = $params['action'];
-
+            //211行目    
             $this->runAction($controller, $action, $params);
+
         } catch (HttpNotFoundException $e) {
             $this->render404Page($e);
         } catch (UnauthorizedActionException $e) {
@@ -206,15 +210,21 @@ abstract class Application
      */
     public function runAction($controller_name, $action, $params = array())
     {
+        //ucfirst — 文字列の最初の文字を大文字にする
+        //ex $controller_class = "StatusController";
         $controller_class = ucfirst($controller_name) . 'Controller';
 
+        //インスタンスを代入
         $controller = $this->findController($controller_class);
+
         if ($controller === false) {
             throw new HttpNotFoundException($controller_class . ' controller is not found.');
         }
 
+        //controller->run メソッド　24行目　$action = $params['action']; actionを実行
         $content = $controller->run($action, $params);
-
+        
+        //var_dump($content);
         $this->response->setContent($content);
     }
 
@@ -225,9 +235,13 @@ abstract class Application
      * @return Controller
      */
     protected function findController($controller_class)
-    {
+    {   
+        //$controller_class = "StatusController";
+        //クラスが定義済みかどうかを確認する
         if (!class_exists($controller_class)) {
+            //ファイルのパスを作る
             $controller_file = $this->getControllerDir() . '/' . $controller_class . '.php';
+            //ファイルが存在し、読み込み可能であるかどうかを調べる
             if (!is_readable($controller_file)) {
                 return false;
             } else {

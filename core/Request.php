@@ -87,7 +87,7 @@ class Request
      */
     public function getRequestUri()
     {
-        return $_SERVER['REQUEST_URI'];
+        return $_SERVER['REQUEST_URI'];//getパラメーターまで
     }
 
     /**
@@ -95,16 +95,18 @@ class Request
      *
      * @return string
      */
-    public function getBaseUrl()
-    {
-        $script_name = $_SERVER['SCRIPT_NAME'];
+    public function getBaseUrl()//ベースURLを取得する
+    {   
+        $script_name = $_SERVER['SCRIPT_NAME'];//フロントコントローラーまで
+        // /mini-blog/web/index_dev.php
 
-        $request_uri = $this->getRequestUri();
+        $request_uri = $this->getRequestUri();//getパラメーターまで
+        // /mini-blog/web/index_dev.php/account/detail
 
         if (0 === strpos($request_uri, $script_name)) {
-            return $script_name;
+            return $script_name;//fcがURLに含まれる場合
         } else if (0 === strpos($request_uri, dirname($script_name))) {
-            return rtrim(dirname($script_name), '/');
+            return rtrim(dirname($script_name), '/');//fcが省略されている場合
         }
 
         return '';
@@ -115,9 +117,10 @@ class Request
      *
      * @return string
      */
-    public function getPathInfo()
+    public function getPathInfo()//PATH_INFOを取得する
     {
         $base_url = $this->getBaseUrl();
+
         $request_uri = $this->getRequestUri();
 
         if (false !== ($pos = strpos($request_uri, '?'))) {

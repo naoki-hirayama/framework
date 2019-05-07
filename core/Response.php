@@ -33,6 +33,7 @@ class Response
      */
     public function setContent($content)
     {
+        //application.php 228行目
         $this->content = $content;
     }
 

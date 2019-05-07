@@ -37,6 +37,7 @@ class ClassLoader
         foreach ($this->dirs as $dir) {
             $file = $dir . '/' . $class . '.php';
             if (is_readable($file)) {
+                //ファイルが存在し、読み込み可能であるかどうか
                 require $file;
 
                 return;

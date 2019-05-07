@@ -7,7 +7,7 @@
  */
 class View
 {
-    protected $base_dir;
+    protected $base_dir;//viewsディレクトリへの絶対パスを指定
     protected $defaults;
     protected $layout_variables = array();
 
@@ -48,7 +48,7 @@ class View
 
         extract(array_merge($this->defaults, $_variables));
 
-        ob_start(); //わからない
+        ob_start(); //
         ob_implicit_flush(0);
 
         require $_file;
@@ -62,7 +62,8 @@ class View
                 )
             ));
         }
-
+        //var_dump($this->base_dir);
+        //var_dump($this->defaults);
         return $content;
     }
 
