@@ -66,14 +66,14 @@ abstract class Application
      *
      * @return string ルートディレクトリへのファイルシステム上の絶対パス
      */
-    abstract public function getRootDir();
+    abstract public function getRootDir();  
 
     /**
      * ルーティングを取得
      *
      * @return array
      */
-    abstract protected function registerRoutes();
+    abstract protected function registerRoutes();  // '/' => array('controller' => 'status', 'action' => 'index'),
 
     /**
      * デバッグモードか判定
@@ -174,6 +174,8 @@ abstract class Application
     {
         try {
             $params = $this->router->resolve($this->request->getPathInfo());
+            var_dump($params);
+
             if ($params === false) {
                 throw new HttpNotFoundException('No route found for ' . $this->request->getPathInfo());
             }
@@ -190,6 +192,7 @@ abstract class Application
         }
 
         $this->response->send();
+        
     }
 
     /**

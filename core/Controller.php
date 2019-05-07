@@ -41,8 +41,9 @@ abstract class Controller
      *
      * @throws UnauthorizedActionException 認証が必須なアクションに認証前にアクセスした場合
      */
-    public function run($action, $params = array())
+    public function run($action, $params = array()) //わからない
     {
+        //var_dump($action); //index
         $this->action_name = $action;
 
         $action_method = $action . 'Action';
@@ -54,7 +55,9 @@ abstract class Controller
             throw new UnauthorizedActionException();
         }
 
-        $content = $this->$action_method($params);
+        $content = $this->$action_method($params);  //?????
+
+        //var_dump($content); //string(1486) ???
 
         return $content;
     }
@@ -63,7 +66,7 @@ abstract class Controller
      * ビューファイルのレンダリング
      *
      * @param array $variables テンプレートに渡す変数の連想配列
-     * @param string $template ビューファイル名(nullの場合はアクション名を使う)
+     * @param string $template ビューファイル名(nullの場合はアクション名を使う) ****
      * @param string $layout レイアウトファイル名
      * @return string レンダリングしたビューファイルの内容
      */
@@ -75,6 +78,7 @@ abstract class Controller
             'session'  => $this->session,
         );
 
+        //インスタンス
         $view = new View($this->application->getViewDir(), $defaults);
 
         if (is_null($template)) {
@@ -82,7 +86,7 @@ abstract class Controller
         }
 
         $path = $this->controller_name . '/' .$template;
-
+        //var_dump($path); //"account/index" 
         return $view->render($path, $variables, $layout);
     }
 

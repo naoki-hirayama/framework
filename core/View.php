@@ -48,7 +48,7 @@ class View
 
         extract(array_merge($this->defaults, $_variables));
 
-        ob_start();
+        ob_start(); //わからない
         ob_implicit_flush(0);
 
         require $_file;
