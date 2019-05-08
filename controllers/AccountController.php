@@ -80,9 +80,49 @@ class AccountController extends Controller
         $followings = $this->db_manager->get('User')
             ->fetchAllFollowingsByUserId($user['id']);
 
+        $messages = [];
+        $errors = [];
+        if ($this->request->isPost()) {
+            //post送信された時
+            $user_repository = $this->db_manager->get('User');
+            $current_password = $this->request->getPost('current_password');
+            $new_password = $this->request->getPost('new_password');
+            $confirm_password = $this->request->getPost('confirm_password');
+            $token = $this->request->getPost('_token');
+            if (!$this->checkCsrfToken('account/signin', $token)) {
+                return $this->redirect('/');
+            }
+            if ($user['password'] !== $user_repository->hashPassword($current_password)) {
+                $errors[] = "パスワードが間違っています。";
+            } else {
+                if ($new_password !== $confirm_password) {
+                    $errors[] = '確認パスワードが一致しません';
+                } elseif (strlen($new_password) < 4 || strlen($new_password) > 30) {
+                    $errors[] = 'パスワード は４〜30字以内で入力してください';
+                }
+            }
+            if (count($errors) === 0) {
+                $password = $user_repository->hashPassword($new_password);
+                $sql = 'UPDATE user SET password = :password WHERE user_name = :user_name';
+
+                $stmt = $user_repository->execute($sql, array(
+                    ':user_name' => $user['user_name'],
+                    ':password' => $password,
+                ));
+
+                $user = $user_repository->fetchByUserName($user['user_name']);
+                $this->session->set('user', $user);
+
+                $messages[] = "変更しました";
+            }
+        }
+
         return $this->render(array(
             'user'       => $user,
             'followings' => $followings,
+            'messages'   => $messages,
+            'errors'     => $errors,
+            '_token'     => $this->generateCsrfToken('account/signin'),
         ));
     }
 

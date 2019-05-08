@@ -44,7 +44,7 @@ class StatusController extends Controller
             'pager'    => $pager,
         ));
     }
-
+    
     public function postAction()
     {
         if (!$this->request->isPost()) {

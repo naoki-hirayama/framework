@@ -19,7 +19,7 @@ class MiniBlogApplication extends Application
         return array(
             '/'
                 => array('controller' => 'status', 'action' => 'index'),
-            '/:page' 
+            '/:page'
                 => array('controller' => 'status', 'action' => 'index'),
             '/status/post'
                 => array('controller' => 'status', 'action' => 'post'),

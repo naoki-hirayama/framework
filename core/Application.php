@@ -176,6 +176,7 @@ abstract class Application
         
         try {
             //コントローラー名とアクション名を特定
+            //var_dump($this->request->getPathInfo());  ex "/account/detail"
             $params = $this->router->resolve($this->request->getPathInfo());//返り値 "/" 
             //var_dump($params);
             //array(3) { ["controller"]=> string(7) "account" ["action"]=> string(5) "index" [0]=> string(15) "/account/detail" }
@@ -232,7 +233,7 @@ abstract class Application
 
         //controller->run メソッド　24行目　$action = $params['action']; actionを実行
         $content = $controller->run($action, $params);
-
+        //var_dump($controller_name);
         //var_dump($content);
         $this->response->setContent($content);
     }

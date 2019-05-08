@@ -46,7 +46,7 @@ class Router
             $pattern = '/' . implode('/', $tokens);
             $routes[$pattern] = $params;
         }
-
+        
         return $routes;
     }
 
@@ -67,6 +67,7 @@ class Router
         foreach ($this->routes as $pattern => $params) {
             if (preg_match('#^' . $pattern . '$#', $path_info, $matches)) {
                 $params = array_merge($params, $matches); 
+
                 //var_dump($params);
                 //["controller"]=> "status" ["action"]=> "index" [0]=> "/" 
                 return $params;

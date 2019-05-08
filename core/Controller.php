@@ -50,7 +50,7 @@ abstract class Controller
 
         $action_method = $action . 'Action';
         //var_dump($this);
-        //指定した object にクラスメソッドが存在するかどうか  
+        //指定した object にメソッドが存在するかどうか  
         if (!method_exists($this, $action_method)) {
             $this->forward404();
         }
@@ -96,7 +96,7 @@ abstract class Controller
         //var_dump($defaults);  ["request"]=> object(Request)#3 (0) { } ["base_url"]=> string(28) "/mini-blog/web/index_dev.php" ["session"]=> object(Session)#5 (0) { }
         $view = new View($this->application->getViewDir(), $defaults);
 
-        //
+        
         if (is_null($template)) {
             $template = $this->action_name;
         }
