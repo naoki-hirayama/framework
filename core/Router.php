@@ -58,7 +58,7 @@ class Router
      */
     public function resolve($path_info) //引数 "/" p219
     {
-        //$this->routes↓ を検索して PATH_INFOから controller, action を特定する
+        //$this->routes を検索して PATH_INFOから controller, action を特定する
 
         if ('/' !== substr($path_info, 0, 1)) {
             $path_info = '/' . $path_info;//$path_infoの先頭が"/" でない時
@@ -68,7 +68,7 @@ class Router
             if (preg_match('#^' . $pattern . '$#', $path_info, $matches)) {
                 $params = array_merge($params, $matches); 
                 //var_dump($params);
-                //array(3) { ["controller"]=> string(6) "status" ["action"]=> string(5) "index" [0]=> string(1) "/" }
+                //["controller"]=> "status" ["action"]=> "index" [0]=> "/" 
                 return $params;
             }
         }
