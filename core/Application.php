@@ -176,7 +176,7 @@ abstract class Application
         
         try {
             //コントローラー名とアクション名を特定
-            $params = $this->router->resolve($this->request->getPathInfo());
+            $params = $this->router->resolve($this->request->getPathInfo());//返り値 "/" 
             //var_dump($params);
             //array(3) { ["controller"]=> string(7) "account" ["action"]=> string(5) "index" [0]=> string(15) "/account/detail" }
 

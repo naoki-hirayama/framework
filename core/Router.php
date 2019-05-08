@@ -56,7 +56,7 @@ class Router
      * @param string $path_info
      * @return array|false
      */
-    public function resolve($path_info) //引数 "/" 
+    public function resolve($path_info) //引数 "/" p219
     {
         //$this->routes↓ を検索して PATH_INFOから controller, action を特定する
 

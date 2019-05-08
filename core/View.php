@@ -54,6 +54,7 @@ class View
         $_path = "account/index" 
 
         */
+
         $_file = $this->base_dir . '/' . $_path . '.php';
         //var_dump($_file);/vagrant/mini-blog/views/account/index.php"
         //var_dump($_file); "/vagrant/mini-blog/views/layout.php"
@@ -62,10 +63,10 @@ class View
         //var_dump(array_merge($this->defaults, $_variables));
 
         //p249 
-        var_dump(extract(array_merge($this->defaults, $_variables)));
+        //var_dump(extract(array_merge($this->defaults, $_variables)));
         extract(array_merge($this->defaults, $_variables));
        
-        //バッファという場所にデータをためておくこと
+        //バッファという場所にデータをためておく
         ob_start();
         ob_implicit_flush(0);
 
