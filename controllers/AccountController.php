@@ -79,7 +79,7 @@ class AccountController extends Controller
         $user = $this->session->get('user');
         $followings = $this->db_manager->get('User')
             ->fetchAllFollowingsByUserId($user['id']);
-        
+
         return $this->render(array(
             'user'       => $user,
             'followings' => $followings,
@@ -190,6 +190,6 @@ class AccountController extends Controller
             $following_repository->insert($user['id'], $follow_user['id']);
         }
 
-        return $this->redirect('/account');
+        return $this->redirect('/account/detail');
     }
 }
