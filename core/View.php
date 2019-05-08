@@ -19,7 +19,7 @@ class View
      */
     public function __construct($base_dir, $defaults = array())
     {
-        $this->base_dir = $base_dir;
+        $this->base_dir = $base_dir; // "/vagrant/mini-blog/views"
         $this->defaults = $defaults;
     }
 
@@ -43,12 +43,30 @@ class View
      * @return string
      */
     public function render($_path, $_variables = array(), $_layout = false)
-    {
+    {   
+        /*
+        $_variables
+        ["user"] => array(4){
+        ["id"] => "13" ["user_name"] => "hirayama" ["password"] => "ee946816178c2dbfad3ae0579691d5b109a40bad" ["created_at"] => "2019-05-07 10:06:33"
+        }
+        ["followings"] => array(0){}
+
+        $_path = "account/index" 
+
+        */
         $_file = $this->base_dir . '/' . $_path . '.php';
+        //var_dump($_file);/vagrant/mini-blog/views/account/index.php"
+        //var_dump($_file); "/vagrant/mini-blog/views/layout.php"
+        //var_dump($this->defaults);
 
+        //var_dump(array_merge($this->defaults, $_variables));
+
+        //p249 
+        var_dump(extract(array_merge($this->defaults, $_variables)));
         extract(array_merge($this->defaults, $_variables));
-
-        ob_start(); //
+       
+        //バッファという場所にデータをためておくこと
+        ob_start();
         ob_implicit_flush(0);
 
         require $_file;

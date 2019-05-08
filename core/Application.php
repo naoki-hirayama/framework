@@ -52,6 +52,7 @@ abstract class Application
         $this->session    = new Session();
         $this->db_manager = new DbManager();
         $this->router     = new Router($this->registerRoutes());
+        //var_dump($this->registerRoutes()); 
     }
 
     /**
@@ -176,7 +177,7 @@ abstract class Application
         try {
             //コントローラー名とアクション名を特定
             $params = $this->router->resolve($this->request->getPathInfo());
-            var_dump($params);
+            //var_dump($params);
             //array(3) { ["controller"]=> string(7) "account" ["action"]=> string(5) "index" [0]=> string(15) "/account/detail" }
 
             if ($params === false) {
@@ -185,7 +186,10 @@ abstract class Application
             //コントローラー、アクション名をそれぞれ代入
             $controller = $params['controller'];
             $action = $params['action'];
-            //211行目    
+            //211行目 
+            //$controller = "account"
+            //$action = "index"
+            //$params = ["controller"]=> "account" ["action"]=> "index" [0]=> "/account/detail"
             $this->runAction($controller, $action, $params);
 
         } catch (HttpNotFoundException $e) {
@@ -208,10 +212,15 @@ abstract class Application
      *
      * @throws HttpNotFoundException コントローラが特定できない場合
      */
+
+    //$controller_name = "account"
+    //$action = "index"
+    //$params = ["controller"]=> "account" ["action"]=> "index" [0]=> "/account/detail"
     public function runAction($controller_name, $action, $params = array())
     {
         //ucfirst — 文字列の最初の文字を大文字にする
-        //ex $controller_class = "StatusController";
+
+        //$controller_class = "StatusController";
         $controller_class = ucfirst($controller_name) . 'Controller';
 
         //インスタンスを代入
@@ -223,7 +232,7 @@ abstract class Application
 
         //controller->run メソッド　24行目　$action = $params['action']; actionを実行
         $content = $controller->run($action, $params);
-        
+
         //var_dump($content);
         $this->response->setContent($content);
     }
@@ -252,8 +261,9 @@ abstract class Application
                 }
             }
         }
-
+        
         return new $controller_class($this);
+        //例 $this: AccountController
     }
 
     /**

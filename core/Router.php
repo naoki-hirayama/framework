@@ -17,6 +17,8 @@ class Router
     public function __construct($definitions)
     {
         $this->routes = $this->compileRoutes($definitions);
+        //var_dump($this->routes);
+        
     }
 
     /**
@@ -27,7 +29,8 @@ class Router
      */
     public function compileRoutes($definitions)
     {
-        //ルーティング定義↓ から $this->routes↓ を作成する
+        
+        //ルーティング定義 から $this->routes を作成する
         $routes = array();
 
         foreach ($definitions as $url => $params) {
@@ -53,17 +56,19 @@ class Router
      * @param string $path_info
      * @return array|false
      */
-    public function resolve($path_info)
+    public function resolve($path_info) //引数 "/" 
     {
         //$this->routes↓ を検索して PATH_INFOから controller, action を特定する
+
         if ('/' !== substr($path_info, 0, 1)) {
-            $path_info = '/' . $path_info;
+            $path_info = '/' . $path_info;//$path_infoの先頭が"/" でない時
         }
 
         foreach ($this->routes as $pattern => $params) {
             if (preg_match('#^' . $pattern . '$#', $path_info, $matches)) {
                 $params = array_merge($params, $matches); 
                 //var_dump($params);
+                //array(3) { ["controller"]=> string(6) "status" ["action"]=> string(5) "index" [0]=> string(1) "/" }
                 return $params;
             }
         }

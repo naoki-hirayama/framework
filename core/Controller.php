@@ -78,6 +78,13 @@ abstract class Controller
      */
     protected function render($variables = array(), $template = null, $layout = 'layout')
     {
+        /*
+        $variables
+        ["user"] => array(4){
+        ["id"] => "13" ["user_name"] => "hirayama" ["password"] => "ee946816178c2dbfad3ae0579691d5b109a40bad" ["created_at"] => "2019-05-07 10:06:33"
+        }
+        ["followings"] => array(0){}
+        */
         $defaults = array(
             'request'  => $this->request,
             'base_url' => $this->request->getBaseUrl(),
@@ -85,8 +92,11 @@ abstract class Controller
         );
 
         //インスタンス
+        //var_dump($this->application->getViewDir());
+        //var_dump($defaults);  ["request"]=> object(Request)#3 (0) { } ["base_url"]=> string(28) "/mini-blog/web/index_dev.php" ["session"]=> object(Session)#5 (0) { }
         $view = new View($this->application->getViewDir(), $defaults);
 
+        //
         if (is_null($template)) {
             $template = $this->action_name;
         }
