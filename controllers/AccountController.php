@@ -15,8 +15,8 @@ class AccountController extends Controller
         $user = $this->session->get('user');
         $picture_max_size = 1*1024*1024;
         $messages = [];
-        $errors = [];
-        
+        $errors = []; 
+        var_dump($this->application->getRootDir());
         //post送信された時
         if ($this->request->isPost()) {
             
