@@ -9,6 +9,87 @@ class AccountController extends Controller
 {
     protected $auth_actions = array('index', 'signout', 'follow');
 
+    //画像編集メソッド
+    public function editAction()
+    {
+        $user = $this->session->get('user');
+        $picture_max_size = 1*1024*1024;
+        $messages = [];
+        $errors = [];
+        //post送信された時
+        if ($this->request->isPost()) {
+            $user_repository = $this->db_manager->get('User');
+            $picture = $this->request->getFiles('picture');
+            
+            if (strlen($picture['name']) === 0) {
+                $errors[] = "画像を選択してください";
+            } else {
+                if ($picture['error'] === UPLOAD_ERR_FORM_SIZE) {
+                    $errors[] = "サイズが" . number_format($picture_max_size) . "MBを超えています。";
+                } else if ($picture['size'] > $picture_max_size) {
+                    $errors[] = "不正な操作です。";
+                } else {
+                    // 画像ファイルのMIMEタイプチェック
+                    $posted_picture = $picture['tmp_name'];
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+
+                    $vaild_picture_types = [
+                        'image/png',
+                        'image/gif',
+                        'image/jpeg'
+                    ];
+
+                    if (!in_array($picture_type, $vaild_picture_types)) {
+                        $errors[] = "画像が不正です。";
+                    }
+                }
+            }
+
+            //バリデーション
+            if (count($errors) === 0) {
+                if ($picture['error'] === UPLOAD_ERR_OK) {
+                    
+                    $posted_picture = $picture['tmp_name'];
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $picture_type = $finfo->file($posted_picture);
+                    $specific_num = uniqid(mt_rand());
+                    $rename_file = $specific_num . '.' . basename($picture_type);
+                    $rename_file_path = '/vagrant/mini-blog/images/' . $rename_file;
+                    move_uploaded_file($picture['tmp_name'], $rename_file_path);
+
+                    if (empty($user['picture'])) {
+                        $picture['name'] = $rename_file;
+                    } else {
+                        $picture['name'] = $rename_file;
+                        unlink("/vagrant/mini-blog/images/{$user['picture']}");
+                    }
+                } else {
+                    $picture['name'] = isset($user['picture']) ? $user['picture'] : null;
+                }
+
+                $sql = 'UPDATE user SET picture = :picture WHERE user_name = :user_name';
+
+                $stmt = $user_repository->execute($sql, array(
+                    ':user_name' => $user['user_name'],
+                    ':picture' => $picture['name'],
+                ));
+
+                $user = $user_repository->fetchByUserName($user['user_name']);
+                $this->session->set('user', $user);
+
+                $messages[] = "変更しました";
+            }
+        }
+        
+        return $this->render(array(
+            'user'       => $user,
+            'messages'   => $messages,
+            'errors'     => $errors,
+            'picture_max_size' => $picture_max_size,
+        ));
+    }
+
     public function signupAction()
     {
         if ($this->session->isAuthenticated()) {
@@ -116,7 +197,7 @@ class AccountController extends Controller
                 $messages[] = "変更しました";
             }
         }
-
+        //var_dump($user);
         return $this->render(array(
             'user'       => $user,
             'followings' => $followings,

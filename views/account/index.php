@@ -1,10 +1,16 @@
 <?php $this->setLayoutVar('title', 'アカウント') ?>
 
 <h2>アカウント</h2>
+<?php if (isset($user['picture'])) : ?>
+    <img src="/mini-blog/images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
+<?php else : ?>
+    <p>NO image</p></br>
+<?php endif; ?>
+
+<a href="<?php echo $base_url ?>/edit/picture">画像を編集</a>
 <p>
     ユーザID:
-    <a href="<?php echo $base_url ?>/user/<?php echo $this->escape($user['user_
-    name']); ?>">
+    <a href="<?php echo $base_url ?>/user/<?php echo $user['user_name'] ?>">
         <strong><?php echo $this->escape($user['user_name']); ?></strong>
     </a>
 </p>

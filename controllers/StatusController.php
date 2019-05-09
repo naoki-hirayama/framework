@@ -44,7 +44,7 @@ class StatusController extends Controller
             'pager'    => $pager,
         ));
     }
-    
+
     public function postAction()
     {
         if (!$this->request->isPost()) {
@@ -89,6 +89,7 @@ class StatusController extends Controller
     {
         $user = $this->db_manager->get('User')
             ->fetchByUserName($params['user_name']);
+        //var_dump($user);
         if (!$user) {
             $this->forward404();
         }

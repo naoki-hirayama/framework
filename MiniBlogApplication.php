@@ -33,6 +33,9 @@ class MiniBlogApplication extends Application
                 => array('controller' => 'account'),
             '/follow/user'
                 => array('controller' => 'account', 'action' => 'follow'),
+            //画像編集
+            '/edit/picture'
+                => array('controller' => 'account', 'action' => 'edit'),
         );
     }
 

@@ -52,6 +52,15 @@ class Request
 
         return $default;
     }
+    //追加
+    public function getFiles($name, $default = null)
+    {
+        if (isset($_FILES[$name])) {
+            return $_FILES[$name];
+        }
+
+        return $default;
+    }
 
     /**
      * ホスト名を取得
