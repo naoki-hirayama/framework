@@ -1,4 +1,4 @@
-<?php $this->setLayoutVar('title', 'pic') ?>
+<?php $this->setLayoutVar('title', '画像編集') ?>
 
 <?php if (isset($errors) && count($errors) > 0) : ?>
     <?php echo $this->render('errors', array('errors' => $errors)) ?>
@@ -8,7 +8,7 @@
     <a href="<?php echo $base_url ?>/account/detail">OK</a>
 <?php endif ?>
 
-<form action="<?php echo $base_url; ?>/edit/picture" method="post" enctype="multipart/form-data">
+<form action="<?php echo $base_url; ?>/add/picture" method="post" enctype="multipart/form-data">
     <p>画像：</p>
     <?php if (isset($user['picture'])) : ?>
         <img src="/mini-blog/images/<?php echo $user['picture'] ?>" width="100" height="100"></br>

@@ -7,10 +7,10 @@
  */
 class AccountController extends Controller
 {
-    protected $auth_actions = array('index', 'signout', 'follow');
+    protected $auth_actions = array('index', 'signout', 'follow', 'addPic');
 
     //画像編集メソッド
-    public function editAction()
+    public function addPicAction()
     {
         $user = $this->session->get('user');
         $picture_max_size = 1*1024*1024;
@@ -18,10 +18,11 @@ class AccountController extends Controller
         $errors = [];
         //post送信された時
         if ($this->request->isPost()) {
-            $user_repository = $this->db_manager->get('User');
+            
             $picture = $this->request->getFiles('picture');
             
             if (strlen($picture['name']) === 0) {
+                
                 $errors[] = "画像を選択してください";
             } else {
                 if ($picture['error'] === UPLOAD_ERR_FORM_SIZE) {
@@ -45,29 +46,28 @@ class AccountController extends Controller
                     }
                 }
             }
-
-            //バリデーション
+            
             if (count($errors) === 0) {
-                if ($picture['error'] === UPLOAD_ERR_OK) {
-                    
-                    $posted_picture = $picture['tmp_name'];
-                    $finfo = new finfo(FILEINFO_MIME_TYPE);
-                    $picture_type = $finfo->file($posted_picture);
-                    $specific_num = uniqid(mt_rand());
-                    $rename_file = $specific_num . '.' . basename($picture_type);
-                    $rename_file_path = '/vagrant/mini-blog/images/' . $rename_file;
-                    move_uploaded_file($picture['tmp_name'], $rename_file_path);
+                
+                $posted_picture = $picture['tmp_name'];
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $picture_type = $finfo->file($posted_picture);
+                $specific_num = uniqid(mt_rand());
+                $rename_file = $specific_num . '.' . basename($picture_type);
+                $rename_file_path = '/vagrant/mini-blog/images/' . $rename_file;
+                move_uploaded_file($picture['tmp_name'], $rename_file_path);
 
-                    if (empty($user['picture'])) {
-                        $picture['name'] = $rename_file;
-                    } else {
-                        $picture['name'] = $rename_file;
-                        unlink("/vagrant/mini-blog/images/{$user['picture']}");
-                    }
+                if (empty($user['picture'])) {
+                    $picture['name'] = $rename_file;
+                    $messages[] = "画像を設定しました";
+
                 } else {
-                    $picture['name'] = isset($user['picture']) ? $user['picture'] : null;
+                    $picture['name'] = $rename_file;
+                    unlink("/vagrant/mini-blog/images/{$user['picture']}");
+                    $messages[] = "新しい画像に変更しました";
                 }
-
+                
+                $user_repository = $this->db_manager->get('User');
                 $sql = 'UPDATE user SET picture = :picture WHERE user_name = :user_name';
 
                 $stmt = $user_repository->execute($sql, array(
@@ -77,17 +77,15 @@ class AccountController extends Controller
 
                 $user = $user_repository->fetchByUserName($user['user_name']);
                 $this->session->set('user', $user);
-
-                $messages[] = "変更しました";
             }
         }
         
         return $this->render(array(
-            'user'       => $user,
-            'messages'   => $messages,
-            'errors'     => $errors,
+            'user'             => $user,
+            'messages'         => $messages,
+            'errors'           => $errors,
             'picture_max_size' => $picture_max_size,
-        ));
+        ), 'addpic');
     }
 
     public function signupAction()
@@ -170,9 +168,11 @@ class AccountController extends Controller
             $new_password = $this->request->getPost('new_password');
             $confirm_password = $this->request->getPost('confirm_password');
             $token = $this->request->getPost('_token');
+
             if (!$this->checkCsrfToken('account/signin', $token)) {
                 return $this->redirect('/');
             }
+
             if ($user['password'] !== $user_repository->hashPassword($current_password)) {
                 $errors[] = "パスワードが間違っています。";
             } else {
@@ -182,6 +182,7 @@ class AccountController extends Controller
                     $errors[] = 'パスワード は４〜30字以内で入力してください';
                 }
             }
+
             if (count($errors) === 0) {
                 $password = $user_repository->hashPassword($new_password);
                 $sql = 'UPDATE user SET password = :password WHERE user_name = :user_name';
@@ -197,7 +198,7 @@ class AccountController extends Controller
                 $messages[] = "変更しました";
             }
         }
-        //var_dump($user);
+        
         return $this->render(array(
             'user'       => $user,
             'followings' => $followings,

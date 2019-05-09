@@ -7,7 +7,7 @@
     <p>NO image</p></br>
 <?php endif; ?>
 
-<a href="<?php echo $base_url ?>/edit/picture">画像を編集</a>
+<a href="<?php echo $base_url ?>/add/picture">画像を編集</a>
 <p>
     ユーザID:
     <a href="<?php echo $base_url ?>/user/<?php echo $user['user_name'] ?>">
