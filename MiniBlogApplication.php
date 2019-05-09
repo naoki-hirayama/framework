@@ -36,6 +36,9 @@ class MiniBlogApplication extends Application
             //画像編集
             '/add/picture'
                 => array('controller' => 'account', 'action' => 'addPic'),
+            //パスワード変更
+            '/change/password'
+                => array('controller' => 'account', 'action' => 'changePassword'),
         );
     }
 

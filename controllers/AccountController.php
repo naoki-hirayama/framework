@@ -53,7 +53,7 @@ class AccountController extends Controller
                 $picture_type = $finfo->file($posted_picture);
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
-                $rename_file_path = '/vagrant/mini-blog/images/' . $rename_file;
+                $rename_file_path = '../images/' . $rename_file;
                 move_uploaded_file($picture['tmp_name'], $rename_file_path);
 
                 if (empty($user['picture'])) {
@@ -62,7 +62,7 @@ class AccountController extends Controller
 
                 } else {
                     $picture['name'] = $rename_file;
-                    unlink("/vagrant/mini-blog/images/{$user['picture']}");
+                    unlink("../images/{$user['picture']}");
                     $messages[] = "新しい画像に変更しました";
                 }
                 
@@ -158,6 +158,16 @@ class AccountController extends Controller
         $followings = $this->db_manager->get('User')
             ->fetchAllFollowingsByUserId($user['id']);
 
+        return $this->render(array(
+            'user'       => $user,
+            'followings' => $followings,
+        ));
+    }
+
+    public function changePasswordAction()
+    {
+        $user = $this->session->get('user');
+
         $messages = [];
         $errors = [];
         if ($this->request->isPost()) {
@@ -194,17 +204,16 @@ class AccountController extends Controller
                 $user = $user_repository->fetchByUserName($user['user_name']);
                 $this->session->set('user', $user);
 
-                $messages[] = "変更しました";
+                $messages[] = "パスワードを変更しました";
             }
         }
-        
+
         return $this->render(array(
             'user'       => $user,
-            'followings' => $followings,
             'messages'   => $messages,
             'errors'     => $errors,
             '_token'     => $this->generateCsrfToken('account/signin'),
-        ));
+        ), 'changepass');
     }
 
     public function signinAction()

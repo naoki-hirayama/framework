@@ -4,7 +4,7 @@
 
 <!-- 画像表示 -->
 <?php if (isset($user['picture'])) : ?>
-    <img src="/mini-blog/images/<?php echo $user['picture'] ?>" width="100" height="100">
+    <img src="../../../images/<?php echo $user['picture'] ?>" width="100" height="100">
 <?php else : ?>
     <p>NO image</p>
 <?php endif; ?>

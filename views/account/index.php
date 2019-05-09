@@ -2,7 +2,7 @@
 
 <h2>アカウント</h2>
 <?php if (isset($user['picture'])) : ?>
-    <img src="/mini-blog/images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
+    <img src="../../../images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
 <?php else : ?>
     <p>NO image</p></br>
 <?php endif; ?>
@@ -22,6 +22,9 @@
     <li>
         <a href="<?php echo $base_url; ?>/account/signout">ログアウト</a>
     </li>
+    <li>
+        <a href="<?php echo $base_url ?>/change/password">パスワード変更</a>
+    </li>
 </ul>
 
 <h3>フォロー中</h3>
@@ -37,47 +40,3 @@
         <?php endforeach; ?>
     </ul>
 <?php endif; ?>
-
-<?php if (isset($errors) && count($errors) > 0) : ?>
-    <?php echo $this->render('errors', array('errors' => $errors)) ?>
-<?php endif ?>
-<?php if (isset($messages) && count($messages) > 0) : ?>
-    <?php echo $this->render('messages', array('messages' => $messages)) ?>
-    <a href="<?php echo $base_url ?>/account/detail">OK</a>
-<?php endif ?>
-
-<div id="password">
-    <h3>パスワード変更</h3>
-    <form action="<?php echo $base_url ?>/account/detail" method="post">
-
-        <input type="hidden" name="_token" value="<?php echo $this->escape($_token) ?>">
-        <table>
-            <tbody>
-                <tr>
-                    <th>現在のパスワード </th>
-                    <td>
-                        <input type="password" name="current_password" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <th>新しいパスワード</th>
-                    <td>
-                        <input type="password" name="new_password" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <th>確認用パスワード</th>
-                    <td>
-                        <input type="password" name="confirm_password" value="">
-                    </td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <td>
-                        <input type="submit" value="変更する">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </form>
-</div>
