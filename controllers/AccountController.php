@@ -16,8 +16,7 @@ class AccountController extends Controller
         $picture_max_size = 1*1024*1024;
         $messages = [];
         $errors = [];
-        $base_url = rtrim($this->request->getBaseUrl(), 'index_dev.php');
-        //var_dump($this->request->getRequestUri());
+        
         //post送信された時
         if ($this->request->isPost()) {
             
@@ -55,16 +54,16 @@ class AccountController extends Controller
                 $picture_type = $finfo->file($posted_picture);
                 $specific_num = uniqid(mt_rand());
                 $rename_file = $specific_num . '.' . basename($picture_type);
-
-                $rename_file_path = $this->request->getHost() . $base_url . 'images/' . $rename_file;
- 
+                $rootdir = $this->application->getRootDir();
+                $rename_file_path = $rootdir . '/images/' . $rename_file;
+                
                 move_uploaded_file($picture['tmp_name'], $rename_file_path);
 
                 if (empty($user['picture'])) {
                     $messages[] = "画像を設定しました";
 
                 } else {
-                    unlink("{$base_url}images/{$user['picture']}");
+                    unlink("{$rootdir}/images/{$user['picture']}");
                     $messages[] = "新しい画像に変更しました";
                 }
                 
