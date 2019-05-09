@@ -57,11 +57,9 @@ class AccountController extends Controller
                 move_uploaded_file($picture['tmp_name'], $rename_file_path);
 
                 if (empty($user['picture'])) {
-                    $picture['name'] = $rename_file;
                     $messages[] = "画像を設定しました";
 
                 } else {
-                    $picture['name'] = $rename_file;
                     unlink("../images/{$user['picture']}");
                     $messages[] = "新しい画像に変更しました";
                 }
@@ -71,7 +69,7 @@ class AccountController extends Controller
 
                 $stmt = $user_repository->execute($sql, array(
                     ':user_name' => $user['user_name'],
-                    ':picture' => $picture['name'],
+                    ':picture' =>$rename_file,
                 ));
 
                 $user = $user_repository->fetchByUserName($user['user_name']);
