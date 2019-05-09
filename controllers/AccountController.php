@@ -19,10 +19,9 @@ class AccountController extends Controller
         //post送信された時
         if ($this->request->isPost()) {
             
-            $picture = $this->request->getFiles('picture');
+            $picture = $this->request->getFiles('picture');//Request.php 56行目
             
             if (strlen($picture['name']) === 0) {
-                
                 $errors[] = "画像を選択してください";
             } else {
                 if ($picture['error'] === UPLOAD_ERR_FORM_SIZE) {
