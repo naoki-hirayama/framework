@@ -11,7 +11,7 @@
 <form action="<?php echo $base_url; ?>/add/picture" method="post" enctype="multipart/form-data">
     <p>画像：</p>
     <?php if (isset($user['picture'])) : ?>
-        <img src="../../../images/images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
+        <img src="../../../images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
     <?php else : ?>
         <p>NO image</p></br>
     <?php endif; ?>
