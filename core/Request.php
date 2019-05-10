@@ -120,7 +120,7 @@ class Request
 
         return '';
     }
-    //追加
+    //追加　
     public function getBaseImgUrl()
     {
         $base_url = $this->getBaseUrl();

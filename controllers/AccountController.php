@@ -16,8 +16,8 @@ class AccountController extends Controller
         $picture_max_size = 1*1024*1024;
         $messages = [];
         $errors = []; 
-        var_dump($this->application->getRootDir());
-        var_dump($this->request->getBaseImgUrl());
+        // var_dump($this->application->getRootDir());
+        // var_dump($this->request->getBaseImgUrl());
         //post送信された時
         if ($this->request->isPost()) {
             
