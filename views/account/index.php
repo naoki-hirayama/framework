@@ -2,7 +2,7 @@
 
 <h2>アカウント</h2>
 <?php if (isset($user['picture'])) : ?>
-    <img src="/mini-blog/images/<?php echo $user['picture'] ?>" width="100" height="100"></br>
+    <img src="<?php echo $base_img_url ?><?php echo $user['picture'] ?>" width="100" height="100"></br>
 <?php else : ?>
     <p>NO image</p></br>
 <?php endif; ?>

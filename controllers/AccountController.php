@@ -17,6 +17,7 @@ class AccountController extends Controller
         $messages = [];
         $errors = []; 
         var_dump($this->application->getRootDir());
+        var_dump($this->request->getBaseImgUrl());
         //post送信された時
         if ($this->request->isPost()) {
             

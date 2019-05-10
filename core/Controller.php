@@ -88,6 +88,7 @@ abstract class Controller
         $defaults = array(
             'request'  => $this->request,
             'base_url' => $this->request->getBaseUrl(),
+            'base_img_url' => $this->request->getBaseImgUrl(),
             'session'  => $this->session,
         );
 

@@ -120,6 +120,14 @@ class Request
 
         return '';
     }
+    //追加
+    public function getBaseImgUrl()
+    {
+        $base_url = $this->getBaseUrl();
+        $pattern = '/web.+$/';
+        $replacement = 'images/';
+        return preg_replace($pattern, $replacement, $base_url);
+    }
 
     /**
      * PATH_INFOを取得
